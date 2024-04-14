@@ -7,7 +7,7 @@ class loginController{
         try{
             const data = await new loginModel().login(new user().setLoginInfo(req.body.email, req.body.pass))
             if(data){
-                const userdata = 
+                const userdata = await new 
                 res.json({"status" : 2000})
             }else{
                 res.json({"status" : 2001})
