@@ -35,6 +35,37 @@ class SqlTools{
         })
     }
 
+    async insert(table, col_insert, colVal){
+        return new Promise((resolve, reject)=>{
+            var query = ""
+            if(col_insert){
+                var colInsStr = col_insert.join(", ")
+                query = `INSERT INTO ${table}(${colInsStr}) VALUES `
+            }else{
+                query = `INSERT INTO ${table} VALUES `
+            }
+            query = query + this.buildInsertValue(colVal)
+            sql.query(query, (err)=>{
+                if(err){
+                    reject(err)
+                }else{
+                    resolve(true)
+                }
+            })
+        })
+    }
+
+    buildInsertValue(col_value){
+        var insert = ""
+        if(col_value){
+            var insertStr = col_value.join(", ")
+            insert = insert + `(${insertStr})`
+        }else{
+            console.log("no insert value")
+        }
+        return insert
+    }
+
     buildCond(cond, condin , matchInCond){
         var query = ""
         if(cond){
@@ -108,6 +139,7 @@ class SqlTools{
         }
         return condition
     }
+
 }
 
 module.exports = SqlTools

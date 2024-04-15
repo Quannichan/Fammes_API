@@ -1,0 +1,5 @@
+Status code:
+
+2000 : ok
+2001 : not ok
+2002 : error
