@@ -18,18 +18,20 @@ class SqlTools{
         })
     }
 
-    select(table,select_col, cond, matchInCond, cond_in){
-        var selectCol_str = select_col.join(", ")
-        var condStr = `SELECT ${selectCol_str} from fammes.${table} WHERE `
-        condStr = condStr + this.buildCond(cond, cond_in ,matchInCond)
-
-        sql.query(query, (err,res)=>{
-            if(err){
-                reject(err)
-            }else{
-                console.log(JSON.parse(JSON.stringify(res))[0])
-                resolve(JSON.parse(JSON.stringify(res))[0])
-            }
+    async select(table,select_col, cond, matchInCond, cond_in){
+        return new Promise((resolve, reject)=>{
+            var selectCol_str = select_col.join(", ")
+            var condStr = `SELECT ${selectCol_str} from fammes.${table} WHERE `
+            condStr = condStr + this.buildCond(cond, cond_in ,matchInCond)
+    
+            sql.query(condStr, (err,res)=>{
+                if(err){
+                    reject(err)
+                }else{
+                    // console.log(JSON.parse(JSON.stringify(res)))
+                    resolve(JSON.parse(JSON.stringify(res)))
+                }
+            })
         })
     }
 

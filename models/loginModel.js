@@ -1,6 +1,6 @@
 const sqlTool = require("../tools/SqlTools")
 const sqlModel = require("../tools/sqlModel")
-const sqlTypeIn = require("../tools/sqlTypeIn")
+// const sqlTypeIn = require("../tools/sqlTypeIn")
 
 class loginModel{
 
@@ -20,8 +20,29 @@ class loginModel{
         return check
     }
 
-    check(){
-        console.log(userModel.email)
+    check(data, req){
+        var check = false
+        if(data.user){
+            if(data.user.data_session.userdata.ID === req.body.id){
+                if(data.user.data_session.tok === req.body.token){
+                    check = true
+                }
+            }
+        }
+        return check
+    }
+
+    logout(data, req){
+        var check = false
+        if(data.user){
+            if(data.user.data_session.userdata.ID === req.body.id){
+                if(data.user.data_session.tok === req.body.token){
+                    req.session.destroy()
+                    check = true
+                }
+            }
+        }
+        return check
     }
 }
 

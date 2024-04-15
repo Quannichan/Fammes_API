@@ -1,12 +1,21 @@
 const express = require("express")
-const bodyParser = require("body-parser")
+const session = require("express-session")
 const {Route} = require("../router/route")
 const app = express()
 const http = require("http")
 const server = http.createServer(app)
 const port = 3000 | process.env.PORT
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+    session({
+        secret : "fammes_session",
+        resave : false,
+        saveUninitialized : true
+    })
+)
+
 Route(app)
 
 server.listen(port , ()=>{
