@@ -34,8 +34,8 @@ class loginController{
         }
     }
 
-    logout(req, res){
-        if(new loginModel().logout(req.session, req)){
+    async logout(req, res){
+        if(await new loginModel().logout(req.session, req)){
             res.json({"status" : 2000})
         }else{
             res.json({"status" : 2002})

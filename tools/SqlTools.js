@@ -55,6 +55,21 @@ class SqlTools{
         })
     }
 
+    async delete(table, cond, next_cond, condIn){
+        return new Promise((resolve, reject)=>{
+            var delStr = `DELETE FROM ${table} WHERE `
+            delStr = delStr + this.buildCond(cond, condIn, next_cond)
+            sql.query(delStr, (err)=>{
+                if(err){
+                    reject(err)
+                }else{
+                    resolve(true)
+                }
+            })
+        })
+       
+    }   
+
     buildInsertValue(col_value){
         var insert = ""
         if(col_value){

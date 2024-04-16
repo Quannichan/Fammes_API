@@ -51,9 +51,21 @@ class loginModel{
         return check
     }
 
-    logout(data, req){
+    async logout(req){
         var check = false
-        
+        var token = req.body.token
+        var id = req.body.id
+        try{
+            var table = "tokenizer"
+            var cond = []
+            cond.push(new sqlModel("id_user", id, "equal" , "and"))
+            cond.push(new sqlModel("TOKEN", token, "equal" , "and"))
+            if(await new sqlTool().delete(table,cond,null, null) === true){
+                check = true
+            }
+        }catch(error){
+            console.log(error)
+        }
         return check
     }
 }
