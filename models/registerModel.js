@@ -18,6 +18,23 @@ class registerModel{
         
     }
 
+    async checkExist(user){
+        var check = false
+        try{
+            var table = "user"
+            var countCol = "ID"
+            var cond = []
+            cond.push(new sqlModel("email", user.email, "equal", null))
+            const count = new sqlTool().getCount(table, cond, null, null, countCol)
+            if(count === 0){
+                check = true
+            }
+        }catch(error){
+            console.log(error)
+        }
+        return check
+    }
+
 }
 
 module.exports = registerModel

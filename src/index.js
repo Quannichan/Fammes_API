@@ -8,13 +8,6 @@ const port = 3000 | process.env.PORT
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(
-    session({
-        secret : "fammes_session",
-        resave : false,
-        saveUninitialized : true
-    })
-)
 
 Route(app)
 

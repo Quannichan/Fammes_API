@@ -2,7 +2,7 @@ const sql= require("../config/connectSql")
 const sqlModels = require("../tools/sqlModel")
 
 class SqlTools{
-    async getCount(table, cond, matchInCond, cond_in,  countCol ){
+    async getCount(table, cond, matchInCond, cond_in, countCol){
         return new Promise((resolve, reject)=>{
             var query = `SELECT COUNT(${countCol}) as COUNT from fammes.${table} WHERE `
             query = query + this.buildCond(cond, cond_in, matchInCond)

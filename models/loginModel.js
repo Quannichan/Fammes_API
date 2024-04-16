@@ -1,4 +1,5 @@
 const sqlTool = require("../tools/SqlTools")
+const { randomToken } = require("../tools/randomTool")
 const sqlModel = require("../tools/sqlModel")
 // const sqlTypeIn = require("../tools/sqlTypeIn")
 
@@ -20,28 +21,39 @@ class loginModel{
         return check
     }
 
-    check(data, req){
-        var check = false
-        if(data.user){
-            if(data.user.data_session.userdata.ID === req.body.id){
-                if(data.user.data_session.tok === req.body.token){
-                    check = true
-                }
+    async createToken(id_user){
+        var tokenreturn = ""
+        try{
+            const token = randomToken()
+            var table = "tokenizer"
+            var col = [" id_user ", " token "]
+            var data = [id_user, `'${token}'`]
+            const result = await new sqlTool().insert(table, col, data)
+            if(result === true){
+                tokenreturn = token
             }
+        }catch(err){
+            console.log(err)
+        }
+        return tokenreturn
+    }
+
+    async check(req){
+        var check = false
+        var table = "tokenizer"
+        var data = []
+        data.push(new sqlModel("id_user", req.body.id, "equal" , "and"))
+        data.push(new sqlModel("TOKEN", req.body.token, "equal" , "and"))
+        const count = await new sqlTool().getCount(table, data, null, null, "ID")
+        if(count > 0){
+            check = true
         }
         return check
     }
 
     logout(data, req){
         var check = false
-        if(data.user){
-            if(data.user.data_session.userdata.ID === req.body.id){
-                if(data.user.data_session.tok === req.body.token){
-                    req.session.destroy()
-                    check = true
-                }
-            }
-        }
+        
         return check
     }
 }
