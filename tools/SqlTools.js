@@ -57,8 +57,11 @@ class SqlTools{
 
     async delete(table, cond, next_cond, condIn){
         return new Promise((resolve, reject)=>{
-            var delStr = `DELETE FROM ${table} WHERE `
-            delStr = delStr + this.buildCond(cond, condIn, next_cond)
+            var delStr = `DELETE FROM ${table} `
+            const buildCond = this.buildCond(cond, condIn, next_cond)
+            if(buildCond.length > 0){
+                delStr = delStr + " WHERE " + buildCond
+            }
             sql.query(delStr, (err)=>{
                 if(err){
                     reject(err)
