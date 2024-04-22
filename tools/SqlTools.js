@@ -18,12 +18,11 @@ class SqlTools{
         })
     }
 
-    async select(table,select_col, cond, matchInCond, cond_in){
+    async select(table,select_col, cond, matchInCond, cond_in, order){
         return new Promise((resolve, reject)=>{
             var selectCol_str = select_col.join(", ")
             var condStr = `SELECT ${selectCol_str} from fammes.${table} WHERE `
-            condStr = condStr + this.buildCond(cond, cond_in ,matchInCond)
-    
+            condStr = condStr + this.buildCond(cond, cond_in ,matchInCond) + this.orderBy()
             sql.query(condStr, (err,res)=>{
                 if(err){
                     reject(err)
@@ -72,6 +71,32 @@ class SqlTools{
         })
        
     }   
+
+    async update(table, update_val, cond,  next_cond, condIn){
+        return new Promise((resolve, reject)=>{
+            var updateStr = `UPDATE TABLE ${table} `
+            updateStr = updateStr + this.buildUpdateValue(update_val)
+            const buildCond = this.buildCond(cond, condIn, next_cond)
+            if(buildCond.length > 0){
+                updateStr = updateStr + " WHERE " + buildCond
+            }
+            sql.query(updateStr, (err)=>{
+                if(err){
+                    reject(err)
+                }else{
+                    resolve(true)
+                }
+            })
+        })
+    }
+
+    buildUpdateValue(cond){
+        var update = ""
+        for(var i = 0; i < cond.length; i++){
+            update = update + `${cond[i].col} = ${cond[i].value}`
+        }
+        return update
+    }
 
     buildInsertValue(col_value){
         var insert = ""
@@ -158,6 +183,16 @@ class SqlTools{
         return condition
     }
 
+    orderBy(order){
+        var orderStr = ""
+        if(order){
+            orderStr = orderStr + "ORDER BY " + `${order.col} ${order.order_type}`
+        }
+        return orderStr
+    }
+
 }
+
+    
 
 module.exports = SqlTools

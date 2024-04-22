@@ -1,7 +1,6 @@
 const loginModel = require("../models/loginModel")
 const user = require("../Entity/user")
 const userModel = require("../models/userModels")
-const {randomToken} = require("../tools/randomTool")
 
 class loginController{
 
@@ -43,4 +42,4 @@ class loginController{
     }
 }
 
-module.exports = loginController
+module.exports = loginController 

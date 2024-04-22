@@ -1,6 +1,8 @@
-const { json } = require("body-parser")
 const user = require("../Entity/user")
 const registerModel = require("../models/registerModel")
+const userModel = require("../models/userModels")
+const loginModel = require("../models/loginModel")
+
 
 class registerController{
 
@@ -10,7 +12,9 @@ class registerController{
             if(check){
                 const canRegis = await new registerModel().register(new user().setUserInfo(null, req.body.name, req.body.email, req.body.pass, null))
                 if(canRegis){
-                    res.json({"status" : 2000})
+                    const userdata = await new userModel().getUsInfo(new user().setLoginInfo(req.body.email, req.body.pass))
+                    const token = await new loginModel().createToken(userdata[0].ID)
+                    res.json({"status" : 2000, "userdata" : userdata[0], "tokenizer" : token})
                 }else{
                     res.json({
                         "status" : 2001,
