@@ -9,8 +9,8 @@ class loginModel{
         var check = false
         try{
             var data = []
-            data.push(new sqlModel("email", userModel.email , "equal", "and"))
-            data.push(new sqlModel("pass", userModel.pass, "equal", "and"))
+            data.push(new sqlModel("email",  `'${userModel.email}'` , "equal", "and"))
+            data.push(new sqlModel("pass", `'${userModel.pass}'`, "equal", "and"))
             const count = await new sqlTool().getCount("user", data, null, null, "ID")
             if(count === 1){
                 check = true
@@ -43,7 +43,20 @@ class loginModel{
         var table = "tokenizer"
         var data = []
         data.push(new sqlModel("id_user", req.body.id, "equal" , "and"))
-        data.push(new sqlModel("TOKEN", req.body.token, "equal" , "and"))
+        data.push(new sqlModel("TOKEN", `'${req.body.token}'`, "equal" , "and"))
+        const count = await new sqlTool().getCount(table, data, null, null, "ID")
+        if(count > 0){
+            check = true
+        }
+        return check
+    }
+
+    async check_GET(req){
+        var check = false
+        var table = "tokenizer"
+        var data = []
+        data.push(new sqlModel("id_user", `${req.query.id}`, "equal" , "and"))
+        data.push(new sqlModel("TOKEN", `'${req.query.token}'`, "equal" , "and"))
         const count = await new sqlTool().getCount(table, data, null, null, "ID")
         if(count > 0){
             check = true
@@ -59,7 +72,7 @@ class loginModel{
             var table = "tokenizer"
             var cond = []
             cond.push(new sqlModel("id_user", id, "equal" , "and"))
-            cond.push(new sqlModel("TOKEN", token, "equal" , "and"))
+            cond.push(new sqlModel("TOKEN", `'${token}'`, "equal" , "and"))
             if(await new sqlTool().delete(table,cond,null, null) === true){
                 check = true
             }

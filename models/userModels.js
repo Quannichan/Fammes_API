@@ -7,8 +7,8 @@ class userModels{
             var data = []
             var selectCol = ["ID", "name", "email", "img"]
 
-            data.push(new sqlModel("email", user.email , "equal", "AND"))
-            data.push(new sqlModel("pass", user.pass , "equal", "AND"))
+            data.push(new sqlModel("email", `'${user.email}'` , "equal", "AND"))
+            data.push(new sqlModel("pass",  `'${user.pass}'` , "equal", "AND"))
 
             const user_data = await new SqlTools().select("user", selectCol, data, null, null , null)
             return user_data

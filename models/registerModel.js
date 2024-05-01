@@ -24,7 +24,7 @@ class registerModel{
             var table = "user"
             var countCol = "ID"
             var cond = []
-            cond.push(new sqlModel("email", user.email, "equal", null))
+            cond.push(new sqlModel("email", `'${user.email}'`, "equal", null))
             const status = await new sqlTool().getCount(table, cond, null, null, countCol)
             if(status === 0){
                 console.log("not exist")

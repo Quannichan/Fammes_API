@@ -33,6 +33,8 @@ class loginController{
         }
     }
 
+    
+
     async logout(req, res){
         if(await new loginModel().logout(req.session, req)){
             res.json({"status" : 2000})

@@ -24,7 +24,7 @@ class imgModel{
         var check = false
         try{
             var updateVal = []
-            updateVal.push(new sqlTypeUpdate("img",`fammes/api/images/${img_name}`))
+            updateVal.push(new sqlTypeUpdate("img",`'fammes/api/images/${img_name}'`))
             var cond = [new sqlModel("ID",us_id,"equal","AND")]
             const status = await new SqlTools().update("user",updateVal,cond,null,null)
             if(status){

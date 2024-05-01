@@ -11,7 +11,6 @@ class SqlTools{
                 if(err){
                     reject(err)
                 }else{
-                    console.log(JSON.parse(JSON.stringify(res))[0].COUNT)
                     resolve(JSON.parse(JSON.stringify(res))[0].COUNT)
                 }
             })
@@ -27,7 +26,6 @@ class SqlTools{
                 if(err){
                     reject(err)
                 }else{
-                    // console.log(JSON.parse(JSON.stringify(res)))
                     resolve(JSON.parse(JSON.stringify(res)))
                 }
             })
@@ -74,9 +72,10 @@ class SqlTools{
 
     async update(table, update_val, cond,  next_cond, condIn){
         return new Promise((resolve, reject)=>{
-            var updateStr = `UPDATE TABLE ${table} `
-            updateStr = updateStr + this.buildUpdateValue(update_val)
+            var updateStr = `UPDATE ${table} `
+            updateStr = updateStr + " set " + this.buildUpdateValue(update_val)
             const buildCond = this.buildCond(cond, condIn, next_cond)
+            
             if(buildCond.length > 0){
                 updateStr = updateStr + " WHERE " + buildCond
             }
@@ -90,11 +89,41 @@ class SqlTools{
         })
     }
 
+    async selectJoin(col_select, table ,table_join, where_cond, matchInCon, inCond){
+        return new Promise((resolve, reject)=>{
+            var condition_str = col_select.join(", ")
+            var selectjoin = `SELECT ${condition_str} FROM ${table} `
+            selectjoin = selectjoin + this.buildOnCondition(table_join)
+            if(where_cond){
+                selectjoin = selectjoin + " WHERE " + this.buildCond(where_cond, inCond, matchInCon)
+            }
+            sql.query(selectjoin, (err,res)=>{
+                if(err){
+                    reject(err)
+                }else{
+                    resolve(JSON.parse(JSON.stringify(res)))
+                }
+            })
+        })
+    }
+
+
+    buildOnCondition(table_join){
+        var joinCon = []
+        for(var tab of table_join){
+           
+            joinCon.push(` ${tab.join_type} ${tab.table} ON ${this.buildCond(tab.on_cond, null, null)}`)
+        }
+        return joinCon.join(", ")
+    }
+
     buildUpdateValue(cond){
         var update = ""
+        var updateArr = []
         for(var i = 0; i < cond.length; i++){
-            update = update + `${cond[i].col} = ${cond[i].value}`
+            updateArr.push(`${cond[i].col} = ${cond[i].value}`)
         }
+        update = update + updateArr.join(", ")
         return update
     }
 
@@ -126,7 +155,7 @@ class SqlTools{
                         if(i === cond.length -1){
                             query = query + this.notequal(cond[i].col, cond[i].col_value,  cond[i].match, true)
                         }else{
-                            query = query + this.notequal(cond[i].col, cond[i].col_value,  cond[i].match, true)
+                            query = query + this.notequal(cond[i].col, cond[i].col_value,  cond[i].match, false)
     
                         }
                         break;
@@ -153,14 +182,14 @@ class SqlTools{
     equal(cond, condVal, Cond_type, isEnd){
         var condition = ""
         if(isEnd){
-            condition = condition +  `${cond} = '${condVal}' `
+            condition = condition +  `${cond} = ${condVal} `
         }else{
             if(Cond_type === "or"){
-                condition = condition + `${cond} = '${condVal}' OR `
+                condition = condition + `${cond} = ${condVal} OR `
             }else if(Cond_type === "and"){
-                condition = condition +`${cond} = '${condVal}' AND `
+                condition = condition +`${cond} = ${condVal} AND `
             }else if(Cond_type === "none"){
-                condition = condition +`${cond} = '${condVal}' `
+                condition = condition +`${cond} = ${condVal} `
             }
         }
         return condition
@@ -169,14 +198,14 @@ class SqlTools{
     notequal(cond, condVal, Cond_type, isEnd){
         var condition = ""
         if(isEnd){
-            condition = condition + `${cond} != '${condVal}' `
+            condition = condition + `${cond} != ${condVal} `
         }else{
             if(Cond_type === "or"){
-                condition = condition +`${cond} != '${condVal}' OR `
+                condition = condition +`${cond} != ${condVal} OR `
             }else if(Cond_type === "and"){
-                condition = condition +`${cond} != '${condVal}' AND `
+                condition = condition +`${cond} != ${condVal} AND `
             }else if(Cond_type === "none"){
-                condition = condition +`${cond} != '${condVal}' `
+                condition = condition +`${cond} != ${condVal} `
             }
             
         }
