@@ -1,4 +1,5 @@
 # node module
 /node_modules
+# folder for image and video
 /images
 /videos
