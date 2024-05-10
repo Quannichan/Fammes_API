@@ -26,6 +26,7 @@ const upload = multer({ storage: storage });
 
 Router.use(express.static('images'));
 
+
 Router.post("/UploadProfileImg", upload.single('image'), (async (req, res)=>{
     console.log(now)
     try{

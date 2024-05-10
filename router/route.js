@@ -4,6 +4,7 @@ const message = require("./routes/messages")
 const checConnect = require("./routes/checkConnect")
 const token = require("./routes/token")
 const image = require("./routes/image")
+const video = require("./routes/video")
 const ROOT_URL = "/fammes/api"
 
 function route(app){
@@ -14,6 +15,8 @@ function route(app){
     app.use(ROOT_URL + "/private", token)
 
     app.use(ROOT_URL + "/images", image)
+
+    app.use(ROOT_URL + "/videos", video)
 
     app.use(ROOT_URL + "/" , checConnect)
     

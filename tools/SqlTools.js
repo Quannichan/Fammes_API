@@ -21,7 +21,8 @@ class SqlTools{
         return new Promise((resolve, reject)=>{
             var selectCol_str = select_col.join(", ")
             var condStr = `SELECT ${selectCol_str} from fammes.${table} WHERE `
-            condStr = condStr + this.buildCond(cond, cond_in ,matchInCond) + this.orderBy()
+            condStr = condStr + this.buildCond(cond, cond_in ,matchInCond) + this.orderBy(order)
+            console.log(condStr)
             sql.query(condStr, (err,res)=>{
                 if(err){
                     reject(err)
