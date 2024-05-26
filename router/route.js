@@ -5,6 +5,7 @@ const checConnect = require("./routes/checkConnect")
 const token = require("./routes/token")
 const image = require("./routes/image")
 const video = require("./routes/video")
+const info = require("./routes/info")
 const ROOT_URL = "/fammes/api"
 
 function route(app){
@@ -18,9 +19,9 @@ function route(app){
 
     app.use(ROOT_URL + "/videos", video)
 
+    app.use(ROOT_URL + "/accSetting", info)
+
     app.use(ROOT_URL + "/" , checConnect)
-    
-    
 }
 
 module.exports.Route = route
