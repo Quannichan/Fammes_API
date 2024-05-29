@@ -80,6 +80,7 @@ class SqlTools{
             if(buildCond.length > 0){
                 updateStr = updateStr + " WHERE " + buildCond
             }
+            console.log(updateStr)
             sql.query(updateStr, (err)=>{
                 if(err){
                     reject(err)
@@ -170,9 +171,10 @@ class SqlTools{
             query = query + matchInCond + " "
             for(var i = 0; i < condin.length; i++){
                 if(i === condin.length -1){
-                    query = query + ` ${condin[i].col} IN (${condin[i].dataIn.join(", ")} )`
+
+                    query = query + ` ${condin[i].col} ${condin[i].intype} (${condin[i].dataIn.join(", ")} )`
                 }else{
-                    query = query + ` ${condin[i].col} IN (${condin[i].dataIn.join(", ")} )  ${condin[i].match}  `
+                    query = query + ` ${condin[i].col} ${condin[i].intype} (${condin[i].dataIn.join(", ")} )  ${condin[i].match}  `
                 }
             }
         }

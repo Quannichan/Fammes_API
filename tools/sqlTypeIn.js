@@ -1,6 +1,7 @@
 class sqlTypeIn{
-    constructor(col, dataIn, match) {
+    constructor(col, dataIn, intype ,match) {
         this.col = col
+        this.intype = intype
         this.dataIn = dataIn
         this.match = match
     }

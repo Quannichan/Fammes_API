@@ -5,7 +5,7 @@ class infoController{
     async changeUN(req, res){
         try{
             if(await new loginModel().check(req)){
-                if(await new infoModel().changeUN(req.id,req.email,req.pass ,req.usname)){
+                if(await new infoModel().changeUN(req.body.id,req.body.email,req.body.pass ,req.body.usname)){
                     res.json({
                         "status" : 2000
                     })
@@ -32,7 +32,8 @@ class infoController{
 
     async changePA(req, res){
         if(new loginModel().check(req)){
-            if(await new infoModel().changePA(req.id,req.email,req.pass, req.newpass)){
+            
+            if(await new infoModel().changePA(req.body.id,req.body.email,req.body.pass, req.body.newpass)){
                 res.json({
                     "status" : 2000
                 })
@@ -51,23 +52,29 @@ class infoController{
     }
 
     async changeImg(req, res){
-        if(new loginModel().check(req)){
-            if(await new infoModel().changeIMG(req.id,req.email,req.pass, req.default ,req.newImg)){
-                res.json({
-                    "status" : 2000
-                })
+            if(await new loginModel().check(req)){
+                const wait = await new infoModel().changeIMG(req.body.id,req.body.email,req.body.pass, req.body.default ,req.body.newImg)
+                    console.log("res: "+wait.img)
+                    if(wait.check===true){
+                        res.json({
+                            "status" : 2000,
+                            "newImg" : wait.img
+                        })
+                    }else{
+                        res.json({
+                            "status" : 2001,
+                            "cause" : "wrongPass"
+                        })
+                    }
+                
             }else{
+                console.log("false 2")
                 res.json({
                     "status" : 2001,
-                    "cause" : "wrongPass"
+                    "cause" : "notlogin"
                 })
             }
-        }else{
-            res.json({
-                "status" : 2001,
-                "cause" : "notlogin"
-            })
-        }
+
     }
 }
 
